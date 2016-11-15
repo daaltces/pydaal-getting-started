@@ -11,8 +11,8 @@ computer, which
 consists of a large set of commonly used mathematic and statistical Python
 packages that are optimized for Intel architectures. 
 
-### Install Intel Distribution for Python through [conda](https://www.continuum.io/downloads)
-1. Install the latest version of [Anaconda](https://www.continuum.io/downloads).
+### Install Intel Distribution for Python through [conda](http://conda.pydata.org/miniconda.html)
+1. Install the latest version of [Miniconda](http://conda.pydata.org/miniconda.html).
     - Choose the Python 3.5 version
 2. From the shell prompt (on Windows, use **Anaconda Prompt**), execute these
    commands:
