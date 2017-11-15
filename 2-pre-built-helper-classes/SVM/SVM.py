@@ -18,28 +18,28 @@ class BinarySVM:
     '''
     def __init__(self, method="boser", C = 1, tolerence = 0.001, tau = 0.000001, maxIterations = 1000000, cacheSize = 8000000, doShrinking = True, kernel = 'linear',
                  sigma = 0,k = 1, b = 0,dtype = float64):
-		'''
-		method: 'boser', default: 'boser'
-			computation method
-		C: deafult: 1
-			Upper bound in conditions of the quadratic optimization problem.
-		tolerance: default: '0.001'
-			Training accuracy/ stopping criteria
-		tau: default: 0.000001
-			Tau parameter of the WSS scheme.
-		maxiterations: default: 1000000
-			Maximal number of iterations for the algorithm.
-		cacheSize: default: 8000000
-			cachesize for storing values of kernal matrix.
-		doShringing: True/false, default: True
-			flag to set shrinking optimization techinique
-		kernel: 'linear'/'rbf', default: 'linear
-		k: default: 1
-			coefficient value of k when kernal function is 'linear'
-		b: 	default: 0
-			coeffiecent value of b of linear function
-		dtype: intc, float32, float63, intc	
-		'''	
+        '''
+        method: 'boser', default: 'boser'
+            computation method
+        C: deafult: 1
+            Upper bound in conditions of the quadratic optimization problem.
+        tolerance: default: '0.001'
+            Training accuracy/ stopping criteria
+        tau: default: 0.000001
+            Tau parameter of the WSS scheme.
+        maxiterations: default: 1000000
+            Maximal number of iterations for the algorithm.
+        cacheSize: default: 8000000
+            cachesize for storing values of kernal matrix.
+        doShringing: True/false, default: True
+            flag to set shrinking optimization techinique
+        kernel: 'linear'/'rbf', default: 'linear
+        k: default: 1
+            coefficient value of k when kernal function is 'linear'
+        b: 	default: 0
+            coeffiecent value of b of linear function
+        dtype: intc, float32, float63, intc
+        '''
         self.method = method
         # Print error message here"
         self.dtype = dtype
