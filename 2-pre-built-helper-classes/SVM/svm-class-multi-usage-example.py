@@ -1,7 +1,10 @@
+import sys, os
+sys.path.append(r'..')
+sys.path.append(os.path.join(os.path.dirname(sys.executable),'share','pydaal_examples','examples','python','source'))
 from SVM import MultiSVM
 from daal.data_management import HomogenNumericTable
-from utils import printNumericTables
-from sklearn.datasets import load_digits, load_iris
+from utils import printNumericTables, printNumericTable
+from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 
 #create train and test dataset
@@ -21,22 +24,38 @@ Instantiate SVM object MultiSVM(nClasses, method="boser", C = 1, tolerence = 0.0
                  sigma = 0,k=1, b=0,dtype=float64)
 '''
 daal_svm = MultiSVM(10,cacheSize=600000000)
-#Training
+#Train
 trainingResult = daal_svm.training(trainData,trainDependentVariables)
 #Predict
-predictResponses = daal_svm.predict(trainingResult, testData)
+predictResults = daal_svm.predict(trainingResult,testData)
+#Evaluate you model
+qualityMet = daal_svm.qualityMetrics(predictResults,testGroundTruth)
+#print accuracy
+print(qualityMet.get('averageAccuracy'))
+#print confusion matrix
+printNumericTable(qualityMet.get('confusionMatrix'))
+#print all metrics
+daal_svm.printAllQualityMetrics(qualityMet)
 #Serialize
-daal_svm.serialize(trainingResult, fileName='svm')
-#deserialize
-dese_trainingRes = daal_svm.deserialize(fileName='svm.npy')
-#or predict with quality metrics
-predictResponses, metrics = daal_svm.predictWithQualityMetrics(dese_trainingRes,testData, testGroundTruth)
-daal_svm.printAllQualityMetrics(metrics)
+daal_svm.serialize(trainingResult, fileName='svm', useCompression=True)
+#Deserialize
+dese_trainingRes = daal_svm.deserialize(fileName='svm.npy', useCompression=True)
 
-
+#Print predicted responses and actual responses
 printNumericTables (
-    testGroundTruth, predictResponses,
-    "Ground truth\t", "Classification results",
-    "SVN classification results (first 20 observations):", 20 , flt64=False
+	testGroundTruth, predictResults,
+	"Ground truth\t", "Classification results",
+	"SVM classification results (first 20 observations):", 20,  flt64=False
 )
+
+
+
+
+
+
+
+
+
+
+
 

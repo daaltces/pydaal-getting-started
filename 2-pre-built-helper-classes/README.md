@@ -33,14 +33,14 @@ lr = LinearRegression()
 trainingResults = lr.training(trainData, trainDependentVariables)
 #Prediction	
 predResponses = lr.prediction(trainingResults, testData)
+#Predict with Metrics
+predRes, predResRed, qualityMet = lr.predictWithQualityMetrics(trainingResult, trainData,trainDependentVariables,reducedBetaIndex=[2,10])
+#Print Metrics results
+lr.printAllQualityMetrics(qualityMet)
 #Serialize
 lr.serialize(trainingResults, fileName = "storeTrainingResults.npy")
 #Deserialize
 retrieveTrainingResults = lr.deserialize(fileName = "storeTrainingResults.npy")
-#Predict with Metrics
-predRes, predResRed, singleBeta, groupBeta = lr.predictWithQualityMetrics(trainingResult, trainData,trainDependentVariables,reducedBetaIndex=[2,10])
-#Print Metrics results
-lr.printAllQualityMetrics(singleBeta,groupBeta)
 ```
 
 For practice, Run the examples from 2-pre-built-helper-class/\<*algorithm*>/\<*usage example*>.

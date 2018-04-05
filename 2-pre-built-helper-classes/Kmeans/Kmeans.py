@@ -13,8 +13,8 @@ class Kmeans:
 	'''
 	Constructor to set Kmeans compute parameters
 	'''
-	def __init__(self, nClusters, maxIterations=300, initialCentroidMethod = 'plusPlusDense',
-				 method = 'dense', oversamplingFactor =0.5, nRounds=5,
+	def __init__(self, nClusters, maxIterations=300, initialCentroidMethod = 'defaultDense',
+				 method = 'defaultDense', oversamplingFactor =0.5, nRounds=5,
 				 accuracyThreshold = 0.0001, gamma = 1.0, distanceType = 'euclidean',
 				 assignFlag = True, dtype = float64):
 		'''
@@ -22,9 +22,9 @@ class Kmeans:
 			number of centroids to compute
 		maxIterations: default: 300
 			maximum number of iterations 
-		initialCentroidMethod: default: ’plusPlusDense' 
+		initialCentroidMethod: default: ’defaultDense' 
 			Initial centroid assignment method. Refer here for other available methods
-		 method: default: 'dense'
+		 method: default: 'defaultDense'
 			final centroid computation mode. Refer here for other available methods	 
 		oversamplingFactor: default: 0.5
 			applicable only if initialCentroidMethod is ‘parallelPlusDense’, ‘parallelPlusCSR’
@@ -60,9 +60,9 @@ class Kmeans:
 			 Attributes - centroidResults, clusterAssignments, objectiveFunction
 	'''
 	def compute(self, data):
-		if self.method == 'csr':
+		if self.method == 'lloydCSR':
 			self.method = kmeans.lloydCSR
-		elif self.method == 'dense':
+		elif self.method == 'defaultDense':
 			self.method = kmeans.lloydDense
 		if self.initialCentroidMethod == 'defaultDense':
 			initMethod = kmeans.init.deterministicDense

@@ -1,3 +1,5 @@
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(sys.executable),'share','pydaal_examples','examples','python','source'))
 from Kmeans import Kmeans
 from daal.data_management import HomogenNumericTable
 from utils import printNumericTable
@@ -15,12 +17,12 @@ nD_y_test = [[x] for x in y_test]
 testGroundTruth = HomogenNumericTable(nD_y_test)
 
 '''
-Instantiate Kmeans object Kmeans(nClusters, maxIterations=300, initialCentroidMethod = 'plusPlusDense',
-                 method = 'dense', oversamplingFactor =0.5, nRounds=5,
+Instantiate Kmeans object Kmeans(nClusters, maxIterations=300, initialCentroidMethod = 'defaultDense',
+                 method = 'defaultDense', oversamplingFactor =0.5, nRounds=5,
                  accuracyThreshold = 0.0001, gamma = 1.0, distanceType = 'euclidean',
                  assignFlag = True, dtype = float64)
 '''
-daal_kmeans = Kmeans(3, assignFlag = True) #no. of clusters
+daal_kmeans = Kmeans(3, initialCentroidMethod='plusPlusDense') #no. of clusters
 #Train
 trainingResult = daal_kmeans.compute(trainData)
 #Cluster centroids, assignments and objective function

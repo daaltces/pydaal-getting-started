@@ -1,34 +1,43 @@
-
+import sys
+import numpy as np
+sys.path.append(r'..')
 from LinearRegression import LinearRegression
 from utils import printNumericTable
 from daal.data_management import HomogenNumericTable
-import numpy as np
 
-nFeatures = 10
-nDependentVariables = 2
+from sklearn.datasets import load_boston
+from sklearn.model_selection import train_test_split
 
-seeded = np.random.RandomState (42)
-trainData =HomogenNumericTable(seeded.rand(200,nFeatures))
-trainDependentVariables = HomogenNumericTable(seeded.rand (200, nDependentVariables))
-testData =HomogenNumericTable(seeded.rand(50,nFeatures))
-testGroundTruth = HomogenNumericTable(seeded.rand (50, nDependentVariables))
+data = load_boston()
+X= data.data
+Y=data.target
+x_train, x_test, y_train_temp, y_test_temp=train_test_split(X,Y,test_size=0.40,random_state=42)
+y_train = y_train_temp[:,np.newaxis]
+y_test= y_test_temp[:,np.newaxis]
+
+trainData = HomogenNumericTable(x_train)
+trainDependentVariables = HomogenNumericTable(y_train)
+testData =HomogenNumericTable(x_test)
+testGroundTruth =HomogenNumericTable(y_test)
 
 #Instantiate Linear Regression object
 lr = LinearRegression()
 #Training
 trainingResult = lr.training(trainData,trainDependentVariables)
 #Prediction
-pred_array = lr.predict(trainingResult,trainData)
+prediction_nT = lr.predict(trainingResult,testData)
+#Evaluation
+qualityMet = lr.qualityMetrics(trainingResult,prediction_nT,testGroundTruth)
+printNumericTable(qualityMet.get('rms'),"Root mean square")
+#To print all the metrics
+lr.printAllQualityMetrics(qualityMet)
+#To predict and evaluate. Note that this method performs predictions on both unrestricted and restricted(reduced) model
+predRes, predResRed, qualityMet = lr.predictWithQualityMetrics(trainingResult, testData, testGroundTruth,[1,2])
 #Serialize
-lr.serialize(trainingResult, fileName = 'trainingResult.npy')
+lr.serialize(trainingResult, fileName = 'LR.npy')
 #Deseriailze
-de_trainingResult = lr.deserialize(fileName = "trainingResult.npy")
-#Predict with Metrics
-predRes, predResRed, singleBeta, groupBeta = lr.predictWithQualityMetrics(trainingResult, trainData, trainDependentVariables, reducedBetaIndex=[2,10])
+de_trainingResult = lr.deserialize(fileName = "LR.npy")
 #Print Metrics results
-lr.printAllQualityMetrics(singleBeta,groupBeta)
 #print predicted responses and actual response
 printNumericTable (predRes, "Linear Regression prediction results: (first 10 rows):", 10)
-printNumericTable (predResRed, "Linear Regression prediction results: (first 10 rows):", 10)
-printNumericTable (trainDependentVariables, "Ground truth (first 10 rows):", 10)
-
+printNumericTable (testGroundTruth, "Ground truth (first 10 rows):", 10)
